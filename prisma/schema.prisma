@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            Int            @id @default(autoincrement())
+  username      String         @unique
+  email         String         @unique
+  password_hash String
+  role          String
+  relics        UserRelics[]
+  rewards       UserRewards[]
+}
+
+model Relic {
+  id       Int           @id @default(autoincrement())
+  name     String
+  era      String
+  vaulted  Boolean
+
+  users    UserRelics[]
+  loot     Loot[]
+}
+
+model Reward {
+  id          Int           @id @default(autoincrement())
+  name        String
+  rarity      String
+  ducat_value Int
+
+  loot        Loot[]
+  users       UserRewards[]
+}
+
+//
+// NEW: Relic - Reward mapping
+//
+model Loot {
+  relic_id  Int
+  reward_id Int
+
+  relic  Relic  @relation(fields: [relic_id], references: [id])
+  reward Reward @relation(fields: [reward_id], references: [id])
+
+  @@id([relic_id, reward_id])
+}
+
+//
+// REPLACEMENT for Drops
+//
+model UserRewards {
+  user_id   Int
+  reward_id Int
+  quantity  Int
+
+  user   User   @relation(fields: [user_id], references: [id])
+  reward Reward @relation(fields: [reward_id], references: [id])
+
+  @@id([user_id, reward_id])
+}
+
+model UserRelics {
+  user_id  Int
+  relic_id Int
+  quantity Int
+
+  user  User  @relation(fields: [user_id], references: [id])
+  relic Relic @relation(fields: [relic_id], references: [id])
+
+  @@id([user_id, relic_id])
+}
