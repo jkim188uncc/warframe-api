@@ -21,14 +21,18 @@ const signup = async (req, res) => {
     });
 
   } catch (err) {
+    // 🔥 DEBUG LOG (THIS IS WHAT YOU WERE MISSING)
+    console.error("SIGNUP ERROR:", err);
+
     if (err.type === "CONFLICT") {
       return res.status(409).json({
         error: err.message
       });
     }
 
+    // 🔥 SHOW REAL ERROR IN RESPONSE (TEMPORARY FOR DEBUGGING)
     return res.status(500).json({
-      error: "Server error"
+      error: err.message || "Server error"
     });
   }
 };
@@ -52,14 +56,18 @@ const login = async (req, res) => {
     });
 
   } catch (err) {
+    // 🔥 DEBUG LOG
+    console.error("LOGIN ERROR:", err);
+
     if (err.type === "UNAUTHORIZED") {
       return res.status(401).json({
         error: err.message
       });
     }
 
+    // 🔥 SHOW REAL ERROR IN RESPONSE (TEMPORARY FOR DEBUGGING)
     return res.status(500).json({
-      error: "Server error"
+      error: err.message || "Server error"
     });
   }
 };
