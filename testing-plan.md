@@ -14,6 +14,14 @@ This testing plan covers all API endpoints for the Warframe relic and reward man
 
 ---
 
+## Full Test Flow (Recommended Order)
+
+1. Create user (signup)
+2. Login user (get token)
+3. Test GET /relics (auth required)
+4. Test POST /relics (admin only)
+5. Test error cases (missing token, invalid ID)
+
 ## 1. Authentication Endpoints
 
 ### POST /api/auth/signup
@@ -505,4 +513,20 @@ For testing purposes, you'll need to create test accounts. Since signup only cre
 - All endpoints except signup/login require JWT authentication
 - Admin-only operations (CREATE, UPDATE, DELETE) require `role: "ADMIN"` in JWT
 - Error responses follow REST conventions with appropriate HTTP status codes
-- Database relationships exist between Users, Relics, and Rewards but are not fully utilized in current endpoints
+
+
+The API is fully functional locally using Node + Prisma + PostgreSQL.
+Deployment (Render) is configured but may require environment variable setup for external database connection.
+
+## Test Accounts (Required for Testing)
+
+### Admin Account
+Email: admin@test.com  
+Password: admin123  
+
+### User Account
+Email: user@test.com  
+Password: user123  
+
+Deployment is available but primarily intended for demonstration. Full testing can be performed locally using provided instructions.
+
